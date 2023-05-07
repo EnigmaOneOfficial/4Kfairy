@@ -124,6 +124,8 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ audioElement }) => {
       const elapsedTime = waveClock.getElapsedTime() * waveSpeed;
       const minSize = 10;
 
+      console.log(analyser)
+
       analyser?.getByteFrequencyData(frequencyData);
       analyser?.getByteTimeDomainData(timeDomainData);
 
