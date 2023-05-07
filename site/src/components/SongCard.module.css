@@ -5,27 +5,29 @@
   color: #333;
   width: 100vw;
   height: 100vh;
-  background-color: #bbe0f5;
-  width: 100vw;
+  background-color: #f2d2e2;
+  background-image: linear-gradient(to bottom, #f2d2e2, #b4d4e7);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   margin: 0 0;
   left: 0;
   top: 0;
 }
 
 .title {
-  font-size: 32px;
+  font-size: 36px;
   text-align: center;
-  display: flex;
   justify-content: space-evenly;
   position: relative;
-  font-weight: bold; /* Add bold text for better emphasis */
+  font-weight: bold;
+  color: #f8f8f8;
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
 }
 
 /* Song List Styles */
 .songListContainer {
-  background-color: #f5f5f5;
-  border-radius: 12px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   transition: left 0.3s ease-in-out, transform 0.3s ease-in-out;
   width: 400px;
   height: 285px;
@@ -47,71 +49,92 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  box-shadow: 0px 2px 1px rgba(0, 0, 0, 0.1);
-  color: #333;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   margin: 6px 5px;
   height: 50px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: none;
   padding: 0px 16px;
   transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+  color: #fafafa;
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
 }
 
 .song:hover {
-  background-color: #b3b3b3;
-}
-
-.songTitle {
-  flex-grow: 1;
-}
-
-.songDuration {
-  margin-left: 16px;
+  background-color: rgba(194, 224, 245, 0.5);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Controls Card Styles */
 .controlsCard {
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
   transition: bottom 0.5s ease-in-out, transform 0.3s ease-in-out;
   width: 50%;
   position: fixed;
   left: 25%;
   bottom: 25px;
   height: 100px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 .timeSlider {
   height: 25px;
-  border-radius: 12px;
+  border-radius: 16px;
   position: absolute;
-  width: 95%;
-  left: 2.5%;
+  width: 90%;
+  left: 5%;
   bottom: 0;
 }
 
 .volumeSlider {
   height: 25px;
-  border-radius: 12px;
+  border-radius: 16px;
   position: absolute;
   width: 95%;
-  left: 2.5%;
+  left: 2 .5%;
   bottom: 18px;
 }
 
 .timeSlider input {
   width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: rgba(0, 0, 0, 0.2);
+  height: 4px;
+  border-radius: 2px;
+}
+
+.timeSlider input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  background-color: rgba(255, 255, 255, 0.8);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 .volumeSlider input {
   position: absolute;
   right: 0;
   width: 25%;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: rgba(0, 0, 0, 0.2);
+  height: 4px;
+  border-radius: 2px;
+}
+
+.volumeSlider input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  background-color: rgba(255, 255, 255, 0.8);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 .buttonWrapper {
@@ -127,41 +150,48 @@
 
 .controls {
   top: 0;
-  box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
   position: absolute;
   width: 100%;
   height: 100%;
 }
 
 .controls button {
-  background-color: #fff;
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   border: none;
   border-radius: 8px;
-  color: #333;
+  color: #434343;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   padding: 8px 16px;
   transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  color: #fafafa;
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
 }
 
 .controls button:hover {
-  background-color: #b3b3b3;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+  background-color: rgba(194, 224, 245, 0.5);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .time {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   text-align: center;
   bottom: 26px;
   right: 46%;
   position: absolute;
+  color: #fafafa;
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
 }
 
 .background {
   position: fixed;
   width: 100vw;
   height: 100vh;
+  background-color: rgba(242, 210, 226, 0);
+  background-image: linear-gradient(to bottom, rgba(242, 210, 226, 0.9), rgba(180, 212, 231, 0.9));
+  opacity: 0.8;
 }

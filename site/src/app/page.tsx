@@ -1,15 +1,17 @@
 'use client'
-import React, { useEffect } from 'react';
+import AudioVisualizer from '@/components/AudioVisualizer';
+import React, { useRef } from 'react';
 import SongCard from '../components/SongCard';
-import { Song, defaultSongs } from '../components/types';
+import { songs } from '../components/songs';
 import styles from './page.module.css';
 
 const App: React.FC = () => {
- 
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   return (
     <div className={styles.main}>
-      <SongCard songs={defaultSongs} />
+      <AudioVisualizer audioElement={audioRef.current!}/>
+      <SongCard songs={songs} audioRef={audioRef} />
     </div>
   );
 };
