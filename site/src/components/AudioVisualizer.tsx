@@ -1,3 +1,4 @@
+'use client'
 import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
 import styles from './AudioVisualizer.module.css';

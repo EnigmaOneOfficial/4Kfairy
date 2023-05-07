@@ -1,3 +1,4 @@
+'use client'
 import { useState, useEffect, useCallback } from 'react';
 import { Song } from './types';
 import styles from './SongCard.module.css';
