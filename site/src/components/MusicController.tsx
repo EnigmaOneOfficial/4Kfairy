@@ -35,7 +35,7 @@ const MusicController = ({
       if (audioRef.current) {
         audioRef.current.loop = isLooping;
       }
-    }, [isLooping]);
+    }, [isLooping, audioRef]);
   
     useEffect(() => {
       if (audioRef.current) {
@@ -55,7 +55,7 @@ const MusicController = ({
       return () => {
         audioElement.removeEventListener('timeupdate', handleTimeUpdate);
       };
-    }, []);
+    });
   
     const handlePlayPause = useCallback(() => {
       const audioElement = audioRef.current!;
@@ -71,13 +71,13 @@ const MusicController = ({
       const currentIndex = songs.findIndex((song) => song === selectedSong);
       const nextIndex = (currentIndex + 1) % songs.length;
       handleSongClick(songs[nextIndex]);
-    }, [selectedSong, songs]);
+    }, [selectedSong, songs, handleSongClick]);
   
     const handleSkipPrevious = useCallback(() => {
       const currentIndex = songs.findIndex((song) => song === selectedSong);
       const previousIndex = (currentIndex - 1 + songs.length) % songs.length;
       handleSongClick(songs[previousIndex]);
-    }, [selectedSong, songs]);
+    }, [selectedSong, songs, handleSongClick]);
   
     useEffect(() => {
       const handleKeyDown = (e: KeyboardEvent) => {

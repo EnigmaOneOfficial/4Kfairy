@@ -174,7 +174,7 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ audioElement }) => {
       renderer.domElement.remove();
       window.removeEventListener('resize', onWindowResize);
     };
-  }, [audioElement]);
+  }, [audioElement, frequencyData, timeDomainData]);
 
   return <div ref={containerRef} className={styles.container}></div>;
 };
