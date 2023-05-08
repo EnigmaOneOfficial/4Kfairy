@@ -1,4 +1,3 @@
-'use client'
 import { useState, useEffect, useCallback } from 'react';
 import { Song } from './types';
 import styles from './SongCard.module.css';
@@ -55,7 +54,7 @@ const MusicController = ({
       return () => {
         audioElement.removeEventListener('timeupdate', handleTimeUpdate);
       };
-    });
+    }, [audioRef]);
   
     const handlePlayPause = useCallback(() => {
       const audioElement = audioRef.current!;
@@ -65,7 +64,7 @@ const MusicController = ({
         audioElement.play();
       }
       setIsPlaying(!isPlaying);
-    }, [isPlaying]);
+    }, [isPlaying, audioRef]);
   
     const handleSkipNext = useCallback(() => {
       const currentIndex = songs.findIndex((song) => song === selectedSong);

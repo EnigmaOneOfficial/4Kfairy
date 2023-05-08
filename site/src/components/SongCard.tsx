@@ -1,4 +1,3 @@
-'use client';
 import { useState, useEffect } from 'react';
 import styles from './SongCard.module.css';
 import { Song } from './types';

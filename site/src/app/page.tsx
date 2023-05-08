@@ -10,7 +10,7 @@ const App: React.FC = () => {
 
   return (
     <div className={styles.main}>
-      <AudioVisualizer audioElement={audioRef.current!}/>
+      <AudioVisualizer audioRef={audioRef}/>
       <SongCard songs={songs} audioRef={audioRef} />
     </div>
   );
