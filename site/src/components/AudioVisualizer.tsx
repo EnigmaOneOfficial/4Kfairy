@@ -6,17 +6,26 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { Reflector } from 'three/examples/jsm/objects/Reflector';
 import { CubeTextureLoader } from 'three';
 
+const gridSize = 128;
+const zoom = 265;
+const skipFrames = 2;
+const minSize = 10;
+const scaleSize = 15;
+
 interface AudioVisualizerProps {
   audioRef: React.RefObject<HTMLAudioElement | null>;
+  audioContext: AudioContext | null;
+  source: MediaElementAudioSourceNode | null;
+  analyser: AnalyserNode | null;
+  setAudioContext: React.Dispatch<React.SetStateAction<AudioContext | null>>;
+  setSource: React.Dispatch<React.SetStateAction<MediaElementAudioSourceNode | null>>;
+  setAnalyser: React.Dispatch<React.SetStateAction<AnalyserNode | null>>;
 }
 
-const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ audioRef }) => {
+const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ audioRef, audioContext, source, analyser, setAudioContext, setSource, setAnalyser }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const frequencyData = new Uint8Array(256);
   const timeDomainData = new Uint8Array(256);
-  const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
-  const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
-  const [source, setSource] = useState<MediaElementAudioSourceNode | null>(null);
 
   const handleLoadedMetadata = () => {
     if (audioRef.current) {
@@ -53,7 +62,7 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ audioRef }) => {
         audioRef.current.removeEventListener('loadedmetadata', handleLoadedMetadata);
       }
     };
-  }, [audioRef]);
+  }, [audioRef, audioContext, source, analyser]);
 
 
   useEffect(() => {
@@ -71,11 +80,8 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ audioRef }) => {
     renderer.setPixelRatio(window.devicePixelRatio);
     container.appendChild(renderer.domElement);
 
-    const gridSize = 128;
-
-    const zoom = 275;
     const camera = new THREE.PerspectiveCamera(50, width / height);
-    camera.position.set(0, 10, zoom);
+    camera.position.set(0, scaleSize, zoom);
     camera.lookAt(new THREE.Vector3(0, 0, 0));
 
     const scene = new THREE.Scene();
@@ -91,13 +97,13 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ audioRef }) => {
     ]);
     scene.background = skyboxTexture;
 
-    const geometry = new THREE.BoxGeometry(1.5, 1, 1.5);
+    const geometry = new THREE.BoxGeometry(2, 1, 2);
     const material = new THREE.MeshPhongMaterial({
       emissive: 0xffffff,
       shininess: 200,
       specular: 0xffffff,
       flatShading: false,
-      reflectivity: 1.4,
+      reflectivity: 1.3,
       refractionRatio: 0,
       envMap: skyboxTexture,
     });
@@ -136,46 +142,54 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ audioRef }) => {
     rotatingGroup.rotateY(Math.PI / 4);
 
     let frameCount = 0;
-    const skipFrames = 2;
 
     const animate = () => {
       requestAnimationFrame(animate);
       frameCount++;
-
-      console.log(audioRef?.current?.volume)
-
+    
       const elapsedTime = waveClock.getElapsedTime() * waveSpeed;
-      const minSize = 1;
-      const scaleSize = 20;
-
+    
       analyser?.getByteFrequencyData(frequencyData);
       analyser?.getByteTimeDomainData(timeDomainData);
-
+    
       if (frameCount % skipFrames === 0) {
         const matrix = new THREE.Matrix4();
+        const waveFactor = 10;
+        const additiveEffectFactor = 2;
         for (let i = 0; i < instanceCount; i++) {
           const x = (i % gridSize) - gridSize / 2;
           const z = Math.floor(i / gridSize) - gridSize / 2;
-          const y = (frequencyData[i % frequencyData.length] / 256) * 50 - minSize - reflector.position.y;
-          //Math.abs(Math.sin(elapsedTime * 0.01));
+          const freqValue = frequencyData[i % frequencyData.length] / 256;
+          const y = (freqValue * 50) - minSize - reflector.position.y;
           const targetY = (y + instancedMesh.userData.y[i]) / 2;
           instancedMesh.userData.y[i] = targetY;
           matrix.makeTranslation(x * 2, targetY, z * 2);
-
+    
+          // Add a wave effect to the animation
+          const waveY = Math.sin((x + elapsedTime) / waveFactor) * Math.cos((z + elapsedTime) / waveFactor) * freqValue * waveFactor;
+    
+          // Apply additive effect based on frequency to nearby geometry
+          const additiveEffect = (freqValue > 0.5) ? Math.pow(freqValue, additiveEffectFactor) : 0;
+    
           const scaleY = Math.max(
             minSize,
-            Math.log2(targetY / 2 + 1) *
-              (scaleSize + frequencyData[i % frequencyData.length] / 256)
+            (targetY + waveY + additiveEffect) *
+              (scaleSize * freqValue)
           );
           matrix.scale(new THREE.Vector3(1, scaleY, 1));
-
+    
           instancedMesh.setMatrixAt(i, matrix);
         }
         instancedMesh.instanceMatrix.needsUpdate = true;
+    
+        frameCount = 0;
       }
-      rotatingGroup.rotation.y = elapsedTime * 0.1;
+    
+      // Apply a smoother rotation effect
+      rotatingGroup.rotation.y = Math.sin(elapsedTime * 0.1) * Math.PI / 4;
       composer.render();
     };
+    
 
     const onWindowResize = () => {
       const width = container.clientWidth;
